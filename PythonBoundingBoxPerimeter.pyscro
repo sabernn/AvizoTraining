@@ -1,5 +1,6 @@
 #import tensorflow as tf
 
+
 class BoundingBoxPerimeter(PyScriptObject):
     def __init__(self):
         self.data.valid_types = ['HxSpatialData']
@@ -24,3 +25,4 @@ class BoundingBoxPerimeter(PyScriptObject):
         z_extent = max_bounds[2] - min_bounds[2]
         perimeter = 2 * (x_extent * y_extent + x_extent * z_extent + y_extent * z_extent)
         print('Saber: The perimeter of %s is %.g. ' % (data.name, perimeter))
+
