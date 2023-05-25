@@ -1,5 +1,11 @@
 
 
+
+
+
+
+# from ..core import PyScriptObject, PyScriptNode, PyScriptPort, PyScriptDataType
+
 class BoundingBoxVolume(PyScriptObject):
 
     def __init__(self):
