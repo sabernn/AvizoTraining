@@ -1,0 +1,34 @@
+
+import example_pool as ep
+# import numpy as np
+
+class MyMultiProcessScro(PyScriptObject) :
+    def __init__(self):
+        # self.ports.data.visible = False
+
+        # self.do_it = HxPortDoIt(self, 'doIt', 'Apply')
+
+        self.data.valid_types = ['HxSpatialData']
+        self.do_it = HxPortDoIt(self, 'doIt', 'Apply')
+
+    def update(self):
+        pass
+
+    def compute(self):
+        # ep.start_processes()
+
+        # Check if module is applied
+        if not self.do_it.was_hit:
+            return
+
+        # Check if input data is connected
+        if self.data.source() is None:
+            return
+
+        data = self.data.source()
+        min_bounds, max_bounds = data.bounding_box
+        x_extent = max_bounds[0] - min_bounds[0]
+        y_extent = max_bounds[1] - min_bounds[1]
+        z_extent = max_bounds[2] - min_bounds[2]
+        perimeter = 2 * (x_extent * y_extent + x_extent * z_extent + y_extent * z_extent)
+        print('Saber: The perimeter of %s is %.g. ' % (data.name, perimeter))
