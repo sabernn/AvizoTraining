@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 data_dir = "G:\\Saber\\WAAM\\Kyungmin_May5\\NP files"
+data_dir = ""
 
 Natten = np.load(os.path.join(data_dir, 'M1003_Natten.npy'))
 NDFI = np.load(os.path.join(data_dir, 'M1003_NDFI.npy'))
@@ -30,6 +31,20 @@ print(NDFI.shape)
 print(X.shape)
 
 Natten_1D = Natten.reshape(-1)
+NDFI_1D = NDFI.reshape(-1)
+X_1D = X.reshape(-1)
+
+AllIntensities = np.vstack((Natten_1D, NDFI_1D, X_1D)).T
+
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d')
+plt.xlabel('Neutron Attenuation')
+plt.ylabel('Neutron Dark Field Image')
+plt.clabel('X-ray Attenuation')
+plt.plot(Natten_1D[0::1000], NDFI_1D[0::1000], X_1D[0::1000],'.')
+plt.show()
+
+print(AllIntensities.shape)
 
 
 print(Natten_1D.shape)
@@ -50,3 +65,5 @@ plt.imshow(X[slice_num])
 plt.title(f'X-ray Attenuation, slice {slice_num}/{max_slice_num}')
 
 plt.show()
+
+
