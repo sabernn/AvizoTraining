@@ -14,8 +14,8 @@ data_dir = ""
 
 Natten = np.load(os.path.join(data_dir, 'M1003_Natten.npy'))
 NDFI = np.load(os.path.join(data_dir, 'M1003_NDFI.npy'))
-X = np.load(os.path.join(data_dir, 'M1003_X.npy'))
-X = X / (X.max() - X.min())
+XA = np.load(os.path.join(data_dir, 'M1003_X.npy'))
+XA = XA / (XA.max() - XA.min())
 
 # print(Natten.dtype)
 # print(NDFI.dtype)
@@ -36,9 +36,9 @@ X = X / (X.max() - X.min())
 
 Natten_1D = Natten.reshape(-1)
 NDFI_1D = NDFI.reshape(-1)
-X_1D = X.reshape(-1)
+XA_1D = XA.reshape(-1)
 
-AllIntensities = np.vstack((Natten_1D, NDFI_1D, X_1D)).T
+AllIntensities = np.vstack((Natten_1D, NDFI_1D, XA_1D)).T
 
 # fig = plt.figure()
 # ax = fig.add_subplot(projection='3d')
@@ -108,7 +108,7 @@ t0 = time.time()
 
 algorithm = hdbscan
 
-X=np.stack((Natten_1D[0::1000], NDFI_1D[0::1000], X_1D[0::1000]), axis=1)
+X=np.stack((Natten_1D[0::1000], NDFI_1D[0::1000], XA_1D[0::1000]), axis=1)
 # X=np.stack((Natten_1D[0::1000], NDFI_1D[0::1000], X_1D[0::1000]), axis=1)
 # X=np.stack((Natten_1D, NDFI_1D, X_1D), axis=1)
 
@@ -191,5 +191,55 @@ plt.text(
             size=15,
             horizontalalignment="right",
         )
+
+plt.show()
+
+cluster1 = X[y_pred==0]
+cluster2 = X[y_pred==1]
+cluster3 = X[y_pred==2]
+cluster4 = X[y_pred==-1]
+
+fig = plt.figure()
+ax = fig.add_subplot(2,2,1,projection='3d')
+ax.scatter3D(cluster1[:, 0], cluster1[:, 1], cluster1[:,2], s=10, color=colors[0])
+ax.set_title('Cluster 1')
+ax.set_xlabel('NA (avg = ' + str(np.mean(cluster1[:,0])) + ')')
+ax.set_ylabel('NDFI (avg = ' + str(np.mean(cluster1[:,1])) + ')')
+ax.set_zlabel('XA (avg = ' + str(np.mean(cluster1[:,2])) + ')')
+ax.set_xlim(Natten_1D.min(), Natten_1D.max())
+ax.set_ylim(NDFI_1D.min(), NDFI_1D.max())
+ax.set_zlim(XA_1D.min(), XA_1D.max())
+
+ax = fig.add_subplot(2,2,2,projection='3d')
+ax.scatter3D(cluster2[:, 0], cluster2[:, 1], cluster2[:,2], s=10, color=colors[1])
+ax.set_title('Cluster 2')
+ax.set_xlabel('NA (avg = ' + str(np.mean(cluster2[:,0])) + ')')
+ax.set_ylabel('NDFI (avg = ' + str(np.mean(cluster2[:,1])) + ')')
+ax.set_zlabel('XA (avg = ' + str(np.mean(cluster2[:,2])) + ')')
+ax.set_xlim(Natten_1D.min(), Natten_1D.max())
+ax.set_ylim(NDFI_1D.min(), NDFI_1D.max())
+ax.set_zlim(XA_1D.min(), XA_1D.max())
+
+ax = fig.add_subplot(2,2,3,projection='3d')
+ax.scatter3D(cluster3[:, 0], cluster3[:, 1], cluster3[:,2], s=10, color=colors[2])
+ax.set_title('Cluster 3')
+ax.set_xlabel('NA (avg = ' + str(np.mean(cluster3[:,0])) + ')')
+ax.set_ylabel('NDFI (avg = ' + str(np.mean(cluster3[:,1])) + ')')
+ax.set_zlabel('XA (avg = ' + str(np.mean(cluster3[:,2])) + ')')
+ax.set_xlim(Natten_1D.min(), Natten_1D.max())
+ax.set_ylim(NDFI_1D.min(), NDFI_1D.max())
+ax.set_zlim(XA_1D.min(), XA_1D.max())
+
+ax = fig.add_subplot(2,2,4,projection='3d')
+ax.scatter3D(cluster4[:, 0], cluster4[:, 1], cluster4[:,2], s=10, color='red')
+ax.set_title('Cluster 4 (outliers)')
+ax.set_xlabel('NA (avg = ' + str(np.mean(cluster4[:,0])) + ')')
+ax.set_ylabel('NDFI (avg = ' + str(np.mean(cluster4[:,1])) + ')')
+ax.set_zlabel('XA (avg = ' + str(np.mean(cluster4[:,2])) + ')')
+ax.set_xlim(Natten_1D.min(), Natten_1D.max())
+ax.set_ylim(NDFI_1D.min(), NDFI_1D.max())
+ax.set_zlim(XA_1D.min(), XA_1D.max())
+
+
 
 plt.show()
