@@ -3,6 +3,7 @@
 import os
 import time
 import warnings
+import h5py
 
 from itertools import cycle, islice
 
@@ -15,6 +16,10 @@ data_dir = ""
 Natten = np.load(os.path.join(data_dir, 'M1003_Natten.npy'))
 NDFI = np.load(os.path.join(data_dir, 'M1003_NDFI.npy'))
 XA = np.load(os.path.join(data_dir, 'M1003_X.npy'))
+
+# with h5py.File(os.path.join(data_dir, 'M1003_XA.h5'), 'w') as f:
+#     f.create_dataset('M1003_XA', data=XA)
+
 XA = XA / (XA.max() - XA.min())
 
 # print(Natten.dtype)
