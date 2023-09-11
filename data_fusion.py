@@ -35,13 +35,25 @@ XA = XA / (XA.max() - XA.min())
 # print(X.sum())
 
 
-# print(Natten.shape)
-# print(NDFI.shape)
-# print(X.shape)
+print(Natten.shape)
+print(NDFI.shape)
+print(XA.shape)
 
-Natten_1D = Natten.reshape(-1)
-NDFI_1D = NDFI.reshape(-1)
-XA_1D = XA.reshape(-1)
+Natten_ds = Natten[0::10, 0::10, 0::10]
+NDFI_ds = NDFI[0::10, 0::10, 0::10]
+XA_ds = XA[0::10, 0::10, 0::10]
+
+
+
+print(Natten_ds.shape)
+print(NDFI_ds.shape)
+print(XA_ds.shape)
+
+Natten_1D = Natten_ds.reshape(-1)
+NDFI_1D = NDFI_ds.reshape(-1)
+XA_1D = XA_ds.reshape(-1)
+
+
 
 AllIntensities = np.vstack((Natten_1D, NDFI_1D, XA_1D)).T
 
@@ -113,7 +125,7 @@ t0 = time.time()
 
 algorithm = hdbscan
 
-X=np.stack((Natten_1D[0::1000], NDFI_1D[0::1000], XA_1D[0::1000]), axis=1)
+X=np.stack((Natten_1D, NDFI_1D, XA_1D), axis=1)
 # X=np.stack((Natten_1D[0::1000], NDFI_1D[0::1000], X_1D[0::1000]), axis=1)
 # X=np.stack((Natten_1D, NDFI_1D, X_1D), axis=1)
 
@@ -163,6 +175,7 @@ colors = np.array(
         )
 
 print(y_pred.shape)
+np.save('y_pred.npy', y_pred)
 print(colors)
 colorsplot = ['c','b','g','r']
 
