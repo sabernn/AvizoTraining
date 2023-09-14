@@ -10,7 +10,7 @@ from itertools import cycle, islice
 import numpy as np
 import matplotlib.pyplot as plt
 
-plot = False
+plot = True
 
 data_dir = "G:\\Saber\\WAAM\\Kyungmin_May5\\NP files"
 data_dir = ""
@@ -41,23 +41,25 @@ print(Natten.shape)
 print(NDFI.shape)
 print(XA.shape)
 
-# Natten_ds = Natten[0::5, 0::5, 0::5]
-# NDFI_ds = NDFI[0::5, 0::5, 0::5]
-# XA_ds = XA[0::5, 0::5, 0::5]
+sf = 5  # scale factor
+
+Natten_ds = Natten[0::sf, 0::sf, 0::sf]
+NDFI_ds = NDFI[0::sf, 0::sf, 0::sf]
+XA_ds = XA[0::sf, 0::sf, 0::sf]
 
 
 
-# print(Natten_ds.shape)
-# print(NDFI_ds.shape)
-# print(XA_ds.shape)
+print(Natten_ds.shape)
+print(NDFI_ds.shape)
+print(XA_ds.shape)
 
-# Natten_1D = Natten_ds.reshape(-1)
-# NDFI_1D = NDFI_ds.reshape(-1)
-# XA_1D = XA_ds.reshape(-1)
+Natten_1D = Natten_ds.reshape(-1)
+NDFI_1D = NDFI_ds.reshape(-1)
+XA_1D = XA_ds.reshape(-1)
 
-Natten_1D = Natten.reshape(-1)
-NDFI_1D = NDFI.reshape(-1)
-XA_1D = XA.reshape(-1)
+# Natten_1D = Natten.reshape(-1)
+# NDFI_1D = NDFI.reshape(-1)
+# XA_1D = XA.reshape(-1)
 
 
 AllIntensities = np.vstack((Natten_1D, NDFI_1D, XA_1D)).T
@@ -106,16 +108,16 @@ np.random.seed(0)
 
 default_base = {
     "quantile": 0.3,
-    "eps": 0.3,
-    "damping": 0.9,
+    "eps": 0.008,
+    "damping": 0.3,
     "preference": -200,
     "n_neighbors": 3,
     "n_clusters": 3,
     "min_samples": 7,
     "xi": 0.05,
     "min_cluster_size": 0.1,
-    "allow_single_cluster": True,
-    "hdbscan_min_cluster_size": 2,
+    "allow_single_cluster": False,
+    "hdbscan_min_cluster_size": 1000,
     "hdbscan_min_samples": 300,
 }
 
@@ -123,6 +125,7 @@ params = default_base.copy()
 
 dbscan = cluster.DBSCAN(eps=params["eps"])
 
+# https://scikit-learn.org/stable/modules/generated/sklearn.cluster.HDBSCAN.html
 hdbscan = cluster.HDBSCAN(
         min_samples=params["hdbscan_min_samples"],
         min_cluster_size=params["hdbscan_min_cluster_size"],
@@ -131,7 +134,9 @@ hdbscan = cluster.HDBSCAN(
 
 t0 = time.time()
 
+
 algorithm = hdbscan
+# algorithm = dbscan
 
 X=np.stack((Natten_1D, NDFI_1D, XA_1D), axis=1)
 # X=np.stack((Natten_1D[0::1000], NDFI_1D[0::1000], X_1D[0::1000]), axis=1)
@@ -155,6 +160,7 @@ with warnings.catch_warnings():
     algorithm.fit(X)
 
 t1 = time.time()
+print(f"Clustering time: {t1 - t0:.2f}s")
 if hasattr(algorithm, "labels_"):
     y_pred = algorithm.labels_.astype(int)
 else:
@@ -183,7 +189,8 @@ colors = np.array(
         )
 
 print(y_pred.shape)
-np.save('y_pred.npy', y_pred)
+np.save('y_pred_x5_HDBSCAN.npy', y_pred)
+print(y_pred.min(), y_pred.max())
 print(colors)
 colorsplot = ['c','b','g','r']
 
