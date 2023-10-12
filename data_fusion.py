@@ -35,9 +35,9 @@ XA = XA / (XA.max() - XA.min())
 # print(X.sum())
 
 
-# print(Natten.shape)
-# print(NDFI.shape)
-# print(X.shape)
+print(Natten.shape)
+print(NDFI.shape)
+print(XA.shape)
 
 Natten_1D = Natten.reshape(-1)
 NDFI_1D = NDFI.reshape(-1)
@@ -169,10 +169,10 @@ colorsplot = ['c','b','g','r']
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
 ax.scatter3D(X[:, 0], X[:, 1], X[:,2], s=10, color=colors[y_pred])
-plt.xlabel('Neutron Attenuation')
-plt.ylabel('Neutron Dark Field Image')
-plt.clabel('X-ray Attenuation')
-
+ax.set_xlabel('Neutron Attenuation')
+ax.set_ylabel('Neutron Dark Field Image')
+# plt.zlabel('X-ray Attenuation')
+ax.set_zlabel('X-ray Attenuation')
 
 # plt.stem(y_pred)
 
