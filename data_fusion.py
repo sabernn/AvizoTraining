@@ -13,11 +13,11 @@ import matplotlib.pyplot as plt
 plot = True
 
 data_dir = "G:\\Saber\\WAAM\\Kyungmin_May5\\NP files"
-data_dir = ""
+data_dir = "M1005\\"
 
-Natten = np.load(os.path.join(data_dir, 'M1003_Natten.npy'))
-NDFI = np.load(os.path.join(data_dir, 'M1003_NDFI.npy'))
-XA = np.load(os.path.join(data_dir, 'M1003_X.npy'))
+Natten = np.load(os.path.join(data_dir, 'M1005_Natten.npy'))
+NDFI = np.load(os.path.join(data_dir, 'M1005_NDFI.npy'))
+XA = np.load(os.path.join(data_dir, 'M1005_X.npy'))
 
 # with h5py.File(os.path.join(data_dir, 'M1003_XA.h5'), 'w') as f:
 #     f.create_dataset('M1003_XA', data=XA)
@@ -41,7 +41,7 @@ print(Natten.shape)
 print(NDFI.shape)
 print(XA.shape)
 
-sf = 5  # scale factor
+sf = 20  # scale factor
 
 Natten_ds = Natten[0::sf, 0::sf, 0::sf]
 NDFI_ds = NDFI[0::sf, 0::sf, 0::sf]
@@ -69,13 +69,13 @@ AllIntensities = np.vstack((Natten_1D, NDFI_1D, XA_1D)).T
 
 
 # if plot:
-    # fig = plt.figure()
-    # ax = fig.add_subplot(projection='3d')
-    # plt.xlabel('Neutron Attenuation')
-    # plt.ylabel('Neutron Dark Field Image')
-    # plt.clabel('X-ray Attenuation')
-    # plt.plot(Natten_1D[0::1000], NDFI_1D[0::1000], X_1D[0::1000],'.')
-    # plt.show()
+#     fig = plt.figure()
+#     ax = fig.add_subplot(projection='3d')
+#     plt.xlabel('Neutron Attenuation')
+#     plt.ylabel('Neutron Dark Field Image')
+#     plt.clabel('X-ray Attenuation')
+#     plt.plot(Natten_1D[0::1000], NDFI_1D[0::1000], XA_1D[0::1000],'.')
+#     plt.show()
 
 # print(AllIntensities.shape)
 
@@ -85,20 +85,20 @@ AllIntensities = np.vstack((Natten_1D, NDFI_1D, XA_1D)).T
 slice_num = 200
 max_slice_num = Natten.shape[0]
 
-# if plot:
-    # fig = plt.figure()
-    # # plt.size = (30, 90)
-    # fig.add_subplot(1, 3, 1)
-    # plt.imshow(Natten[slice_num])
-    # plt.title(f'Neutron Attenuation, slice {slice_num}/{max_slice_num}')
-    # fig.add_subplot(1, 3, 2)
-    # plt.imshow(NDFI[slice_num])
-    # plt.title(f'Neutron Dark Field Image, slice {slice_num}/{max_slice_num}')
-    # fig.add_subplot(1, 3, 3)
-    # plt.imshow(X[slice_num])
-    # plt.title(f'X-ray Attenuation, slice {slice_num}/{max_slice_num}')
+if plot:
+    fig = plt.figure()
+    # plt.size = (30, 90)
+    fig.add_subplot(1, 3, 1)
+    plt.imshow(Natten[slice_num])
+    plt.title(f'Neutron Attenuation, slice {slice_num}/{max_slice_num}')
+    fig.add_subplot(1, 3, 2)
+    plt.imshow(NDFI[slice_num])
+    plt.title(f'Neutron Dark Field Image, slice {slice_num}/{max_slice_num}')
+    fig.add_subplot(1, 3, 3)
+    plt.imshow(XA[slice_num])
+    plt.title(f'X-ray Attenuation, slice {slice_num}/{max_slice_num}')
 
-    # plt.show()
+    plt.show()
 
 
 # Clustering
@@ -204,7 +204,7 @@ if plot:
     ax.set_xlabel('Neutron Attenuation')
     ax.set_ylabel('Neutron Dark Field Image')
 #     plt.zlabel('X-ray Attenuation')
-ax.set_zlabel('X-ray Attenuation')
+    ax.set_zlabel('X-ray Attenuation')
 
     # plt.stem(y_pred)
 
