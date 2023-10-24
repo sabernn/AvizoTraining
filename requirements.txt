@@ -3,3 +3,4 @@ matplotlib
 scikit-learn
 h5py
 pillow
+opencv-python
