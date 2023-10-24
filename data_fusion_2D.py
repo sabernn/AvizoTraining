@@ -21,6 +21,18 @@ Natten = cv2.imread(os.path.join(data_dir, 'TI_ACL_0880nm_annot_8bit.tif'))
 NDFI = cv2.imread(os.path.join(data_dir, 'DFI_ACL_0880nm_annot_8bit.tif'))
 NDPC = cv2.imread(os.path.join(data_dir, 'DPC_ACL_0880nm_annot_8bit.tif'))
 
+if plot:
+    fig = plt.figure()
+    fig.add_subplot(1, 3, 1)
+    plt.imshow(Natten)
+    fig.add_subplot(1, 3, 2)
+    plt.imshow(NDFI)
+    fig.add_subplot(1, 3, 3)
+    plt.imshow(NDPC)
+    
+    plt.show()
+
+
 # Natten = cv2.load(os.path.join(data_dir, 'TI_ACL_880nm.tiff'))
 # NDFI = cv2.load(os.path.join(data_dir, 'DFI_ACL_880nm.tiff'))
 # NDPC = cv2.load(os.path.join(data_dir, 'DPC_ACL_880nm.tiff'))
@@ -49,29 +61,29 @@ print(NDPC.shape)
 
 sf = 20  # scale factor
 
-Natten_ds = Natten[0::sf, 0::sf, 0::sf]
-NDFI_ds = NDFI[0::sf, 0::sf, 0::sf]
-XA_ds = XA[0::sf, 0::sf, 0::sf]
+Natten_ds = Natten[0::sf, 0::sf, 0]
+NDFI_ds = NDFI[0::sf, 0::sf, 0]
+NDPC_ds = NDPC[0::sf, 0::sf, 0]
 
 
 
 print(Natten_ds.shape)
 print(NDFI_ds.shape)
-print(XA_ds.shape)
+print(NDPC_ds.shape)
 print(Natten.shape)
 print(NDFI.shape)
-print(XA.shape)
+print(NDPC.shape)
 
 Natten_1D = Natten_ds.reshape(-1)
 NDFI_1D = NDFI_ds.reshape(-1)
-XA_1D = XA_ds.reshape(-1)
+NDPC_1D = NDPC_ds.reshape(-1)
 
 # Natten_1D = Natten.reshape(-1)
 # NDFI_1D = NDFI.reshape(-1)
 # XA_1D = XA.reshape(-1)
 
 
-AllIntensities = np.vstack((Natten_1D, NDFI_1D, XA_1D)).T
+AllIntensities = np.vstack((Natten_1D, NDFI_1D, NDPC_1D)).T
 
 
 # if plot:
@@ -101,7 +113,7 @@ if plot:
     plt.imshow(NDFI[slice_num])
     plt.title(f'Neutron Dark Field Image, slice {slice_num}/{max_slice_num}')
     fig.add_subplot(1, 3, 3)
-    plt.imshow(XA[slice_num])
+    plt.imshow(NDPC[slice_num])
     plt.title(f'X-ray Attenuation, slice {slice_num}/{max_slice_num}')
 
     plt.show()
